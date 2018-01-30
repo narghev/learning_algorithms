@@ -33,9 +33,9 @@ pair<int,int>find_pair_n_logn(const vector<long long>& a, const vector<long long
 }
 
 // a and b are sorted
-pair<int,int>find_pair(const vector<long long>& a, const vector<long long>& b, long long m){
+pair<int, int> find_pair(const vector<long long>& a, const vector<long long>& b, long long m){
   int  i = 0, j = b.size() - 1;
-  while (i!=a.size() && j!=0){
+  while (i != a.size() && j != 0){
     if (a[i] + b[j] == m){
       return make_pair(i, j);
     }
@@ -45,27 +45,24 @@ pair<int,int>find_pair(const vector<long long>& a, const vector<long long>& b, l
       i++;
     }
   }
-  for (int i=0; i<a.size(); ++i){
-    int b_i = bin_search(b, 0, b.size(), m-a[i]);
-    
-  }
   return make_pair(-1, -1);
 }
 
 int main(){
   vector<long long> a;
-  a.reserve(1000000);
-  for (long long i=0; i<1000000; ++i){
+  int n = 1000000;
+  a.reserve(n);
+  for (long long i=0; i<n; ++i){
     a.push_back(i*i);
   }
 
   vector<long long> b;
-  b.reserve(1000000);
-  for (long long i=0; i<1000000; ++i){
-    a.push_back(i*i + 1);
+  b.reserve(n);
+  for (long long i=0; i<n; ++i){
+    b.push_back(i*i + 1);
   }
 
-  int M = 45*45+47*47+1; // a[45]+b[47] = M
+  long long M = 45*45+47*47+1; // a[45]+b[47] = M
   pair<int, int> p = find_pair(a, b, M);
   cout<<p.first <<" "<<p.second<<endl;
   return 0;
