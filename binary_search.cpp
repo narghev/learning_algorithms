@@ -7,9 +7,12 @@ using namespace std;
 // from a[st:end] which is less than num
 int bin_search(const vector<long long>& a,int start, int end, int num){
   if (end - start == 1){
-    return a[start];
+    return start;
   }
   int mid = (end+start)/2;
+  if (a[mid] == num){
+    return mid;
+  }
   if (a[mid] > num){
     return bin_search(a, start, mid, num);
   }
@@ -18,12 +21,52 @@ int bin_search(const vector<long long>& a,int start, int end, int num){
   }
 }
 
+// a and b are sorted
+pair<int,int>find_pair_n_logn(const vector<long long>& a, const vector<long long>& b, long long m){
+  for (int i=0; i<a.size(); ++i){
+    int b_i = bin_search(b, 0, b.size(), m-a[i]);
+    if (a[i] + b[b_i] == m){
+      return make_pair(i, b_i);
+    }
+  }
+  return make_pair(-1, -1);
+}
+
+// a and b are sorted
+pair<int,int>find_pair(const vector<long long>& a, const vector<long long>& b, long long m){
+  int  i = 0, j = b.size() - 1;
+  while (i!=a.size() && j!=0){
+    if (a[i] + b[j] == m){
+      return make_pair(i, j);
+    }
+    if (a[i] + b[j] > m){
+      j--;
+    } else {
+      i++;
+    }
+  }
+  for (int i=0; i<a.size(); ++i){
+    int b_i = bin_search(b, 0, b.size(), m-a[i]);
+    
+  }
+  return make_pair(-1, -1);
+}
+
 int main(){
   vector<long long> a;
   a.reserve(1000000);
   for (long long i=0; i<1000000; ++i){
     a.push_back(i*i);
   }
-  cout<<bin_search(a, 0, 1000000, 56953)<<endl;
+
+  vector<long long> b;
+  b.reserve(1000000);
+  for (long long i=0; i<1000000; ++i){
+    a.push_back(i*i + 1);
+  }
+
+  int M = 45*45+47*47+1; // a[45]+b[47] = M
+  pair<int, int> p = find_pair(a, b, M);
+  cout<<p.first <<" "<<p.second<<endl;
   return 0;
 }
