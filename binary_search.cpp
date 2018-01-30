@@ -20,6 +20,7 @@ int bin_search(const vector<long long>& a,int start, int end, int num){
 
 int main(){
   vector<long long> a;
+  a.reserve(1000000);
   for (long long i=0; i<1000000; ++i){
     a.push_back(i*i);
   }
