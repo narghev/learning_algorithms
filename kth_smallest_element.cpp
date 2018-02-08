@@ -4,12 +4,6 @@
 
 using namespace std;
 
-void swap(int *a, int *b){
-  int temp_pointer = *a;
-  *a=*b;
-  *b=temp_pointer;
-}
-
 int partition(int array[], int left, int right, int pivot){
   int i = left;
 
@@ -41,7 +35,7 @@ int sort_and_return_median(int array[], int range){
 int kth_smallest_element(int array[], int left, int right, int k){
   int number_of_elements = right-left+1;
 
-  if (k<0 || k>=number_of_elements){
+  if (k<=0 || k>number_of_elements){
     return INT_MAX;
   }
 
@@ -72,10 +66,10 @@ int kth_smallest_element(int array[], int left, int right, int k){
 int main(){
   int array[] = {3,2,1,5,89,6,7,33,123,77,44};
   int size = sizeof(array)/sizeof(array[0]);
-  cout<<kth_smallest_element(array, 0, size-1, 2)<<endl;
+  cout<<kth_smallest_element(array, 0, size-1, 1)<<endl;
 
   sort(array, array+size);
-  for(int i=0; i<size;i++)
+  for(int i=0; i<size; i++)
     cout<<array[i]<<" ";
   cout<<endl;
 
