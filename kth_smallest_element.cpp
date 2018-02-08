@@ -4,6 +4,12 @@
 
 using namespace std;
 
+void swap(int *a, int *b){
+  int temp_pointer = *a;
+  *a=*b;
+  *b=temp_pointer;
+}
+
 int partition(int array[], int left, int right, int pivot){
   int i = left;
 
@@ -53,9 +59,9 @@ int kth_smallest_element(int array[], int left, int right, int k){
   int position_of_med_of_meds = partition(array, left, right, median_of_medians);
 
   if (position_of_med_of_meds-left+1 == k){
-    return array[k];
+    return array[position_of_med_of_meds];
   }
-  else if (position_of_med_of_meds < k){
+  else if (position_of_med_of_meds-left+1 < k){
     int new_k = k-position_of_med_of_meds+left-1;
     return kth_smallest_element(array, position_of_med_of_meds+1, right, new_k);
   }
@@ -66,7 +72,12 @@ int kth_smallest_element(int array[], int left, int right, int k){
 int main(){
   int array[] = {3,2,1,5,89,6,7,33,123,77,44};
   int size = sizeof(array)/sizeof(array[0]);
-  cout<<kth_smallest_element(array, 0, size-1, 3)<<endl;
+  cout<<kth_smallest_element(array, 0, size-1, 1)<<endl;
+
+  sort(array, array+size);
+  for(int i=0; i<size;i++)
+    cout<<array[i]<<" ";
+  cout<<endl;
 
   return 0;
 }
