@@ -12,7 +12,7 @@ int sort_and_return_median(int array[], int range){
 int kth_smallest_element(int array[], int left, int right, int k){
   int number_of_elements = right-left+1;
 
-  if (k<0 || k>number_of_elements){
+  if (k<0 || k>=number_of_elements){
     return INT_MAX;
   }
 
@@ -20,8 +20,7 @@ int kth_smallest_element(int array[], int left, int right, int k){
   int medians[number_of_medians];
   for (int i=0; i<number_of_medians; i++){
     medians[i] = sort_and_return_median(array+left+i*5,
-      i==number_of_medians-2 ? number_of_elements%5 : 5);
-    cout<<medians[i]<<endl;
+      i==number_of_medians-1 ? number_of_elements%5 : 5);
   }
 
   return 0;
