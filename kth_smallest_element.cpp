@@ -72,7 +72,7 @@ int kth_smallest_element(int array[], int left, int right, int k){
 int main(){
   int array[] = {3,2,1,5,89,6,7,33,123,77,44};
   int size = sizeof(array)/sizeof(array[0]);
-  cout<<kth_smallest_element(array, 0, size-1, 1)<<endl;
+  cout<<kth_smallest_element(array, 0, size-1, 2)<<endl;
 
   sort(array, array+size);
   for(int i=0; i<size;i++)
