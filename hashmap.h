@@ -11,7 +11,7 @@ unsigned int myhash(const std::string& key) {
 }
 
 unsigned int myhash(const int& key) {
-	return key * 10000001;
+	return key * 958348721;
 }
 
 template<class Key, class Value>
@@ -19,7 +19,14 @@ class HashMap {
 public:
 
 	HashMap() {
-		H.resize(5);
+		H.resize(100);
+	}
+
+	void print(){
+		for (std::shared_ptr<std::pair<Key, Value> > pair : H){
+			if (pair != nullptr)
+				std::cout<<pair->first<<" "<<pair->second<<std::endl;
+		}
 	}
 
 	void insert(const Key& key, const Value& value) {
@@ -56,6 +63,23 @@ public:
 	bool erase(const Key& key) {
 		// 1 point for implementing this function correctly. NOTE: you can not actually just set the item to null,
 		// because the item must be replaced by the last item in the chain.
+		int h = myhash(key) % H.size();
+
+		while (H[h] != nullptr) {
+			if (H[h]->first == key) {
+				int index_to_be_deleted = h;
+				int last_pair_index = h;
+				h = myhash(h) % H.size();
+				while (H[h] != nullptr){
+					last_pair_index = h;
+					h = myhash(h) % H.size();
+				}
+				H[index_to_be_deleted] = H[last_pair_index];
+				H[last_pair_index] = nullptr;
+				return true;
+			}
+			h = myhash(h) % H.size();
+		}
 		return false;
 	}
 
@@ -64,7 +88,7 @@ private:
 	void rehash(){
 		std::vector<std::shared_ptr<std::pair<Key, Value> > > expanded_map;
 		expanded_map.resize(size*3);
-		for (auto pair : H){
+		for (std::shared_ptr<std::pair<Key, Value> > pair : H){
 			if (pair != nullptr){
 				int h = myhash(pair->first) % expanded_map.size();
 				while (expanded_map[h] != nullptr) {
