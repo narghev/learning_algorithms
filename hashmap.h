@@ -33,7 +33,6 @@ public:
 
 		if (H.size() / size < 3) {
 			std::thread rehash_thread	(&HashMap::rehash, this);
-			rehash_thread.join();
 		}
 	}
 
@@ -66,6 +65,7 @@ private:
 	int size = 0;
 
 	void rehash(){
+		std::cout<<"THRJSS"<<std::endl;
 		rehashing = true;
 		expanding_map.empty();
 		expanding_map.resize(size*10);
@@ -78,7 +78,9 @@ private:
 				expanding_map[h] = std::make_shared<std::pair<Key, Value> >(pair->first, pair->second);
 			}
 		}
+		for (unsigned i = 0; i<999999999; i++){}
 		H = expanding_map;
 		rehashing = false;
+		std::cout<<"finished"<<std::endl;
 	}
 };
