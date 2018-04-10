@@ -1,6 +1,6 @@
-#pragma once
 #include <vector>
 #include <memory>
+#include <thread> 
 
 unsigned int myhash(const std::string& key) {
 	int h = 0;
@@ -19,7 +19,7 @@ class HashMap {
 public:
 
 	HashMap() {
-		H.resize(5);
+		H.resize(2);
 	}
 
 	void insert(const Key& key, const Value& value) {
@@ -32,9 +32,8 @@ public:
 		H[h] = std::make_shared<std::pair<Key, Value> >(key, value);
 
 		if (H.size() / size < 3) {
-			rehash();
-			// rehash everything.
-			// 1 point for implementing the re-hashing, hash table expansion.
+			std::thread rehash_thread	(&HashMap::rehash, this);
+			rehash_thread.join();
 		}
 	}
 
@@ -61,22 +60,25 @@ public:
 
 private:
 
+	std::vector<std::shared_ptr<std::pair<Key, Value> > > expanding_map;
+	std::vector<std::shared_ptr<std::pair<Key, Value> > > H;
+	bool rehashing = false;
+	int size = 0;
+
 	void rehash(){
-		std::vector<std::shared_ptr<std::pair<Key, Value> > > expanded_map;
-		expanded_map.resize(size*3);
-		for (auto pair : H){
+		rehashing = true;
+		expanding_map.empty();
+		expanding_map.resize(size*10);
+		for (std::shared_ptr<std::pair<Key, Value> > pair : H){
 			if (pair != nullptr){
-				int h = myhash(pair->first) % expanded_map.size();
-				while (expanded_map[h] != nullptr) {
-					h = myhash(h) % expanded_map.size();
+				int h = myhash(pair->first) % expanding_map.size();
+				while (expanding_map[h] != nullptr) {
+					h = myhash(h) % expanding_map.size();
 				}
-				expanded_map[h] = std::make_shared<std::pair<Key, Value> >(pair->first, pair->second);
+				expanding_map[h] = std::make_shared<std::pair<Key, Value> >(pair->first, pair->second);
 			}
 		}
-		H = expanded_map;
+		H = expanding_map;
+		rehashing = false;
 	}
-
-	int size; // N
-	// The hashmap.
-	std::vector<std::shared_ptr<std::pair<Key, Value> > > H;
 };
