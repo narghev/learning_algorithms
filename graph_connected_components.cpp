@@ -27,6 +27,17 @@ vector<vector<int>> G_matrix;
 // List of edges.
 vector<Edge> G_edges;
 
+vector<bool> marked;
+void dfs(int v) {
+  marked[v] = true;
+  cout << v << ' ';
+  for (int i = 0; i < G[v].size(); ++i)
+  {
+    if (!marked[G[v][i].v2])
+      dfs(G[v][i].v2);
+  }
+}
+
 void read_graph() {
   int n, m;
   cin >> n >> m;
@@ -44,17 +55,6 @@ void read_graph() {
 
     G[current.v1].push_back(Edge2(current.v2, current.weight));
     G[current.v2].push_back(Edge2(current.v1, current.weight));
-  }
-}
-
-vector<bool> marked;
-void dfs(int v) {
-  marked[v] = true;
-  cout << v << ' ';
-  for (int i = 0; i < G[v].size(); ++i)
-  {
-    if (!marked[G[v][i].v2])
-      dfs(G[v][i].v2);
   }
 }
 

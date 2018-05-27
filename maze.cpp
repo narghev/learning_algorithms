@@ -31,21 +31,30 @@ vector<Edge> G_edges;
 // Maze
 vector<vector<char>> maze;
 
-void bfs(int v) {
-  queue <int> q;
-  marked[v] = -1;
-  q.push(v);
+void make_maze() {
+  int vNumber = 0;
+  for (int i = 0; i < maze.size(); i++) {
+    for (int j = 0; j < maze[0].size(); j++) {
+      if (maze[i][j] == '.') {
+        if (i + 1 < maze.size() && maze[i + 1][j] == '.') {
+          Edge current;
+          current.v1 = vNumber;
+          current.v2 = vNumber + maze[0].size();
+          G[vNumber].push_back(Edge2(current.v2, 1));
 
-  while (!q.empty()) {
-    int currentVertex = q.front();
-
-    for (int i = 0; i < G[currentVertex].size(); i++) {
-      if (marked[G[currentVertex][i].v2] == -2) {
-        marked[G[currentVertex][i].v2] = currentVertex;
-        q.push(G[currentVertex][i].v2);
+          int index = vNumber + maze[0].size();
+          G[index].push_back(Edge2(current.v1, 1));
+        }
+        if (j + 1 < maze[0].size() && maze[i][j + 1] == '.') {
+          Edge current;
+          current.v1 = vNumber;
+          current.v2 = vNumber + 1;
+          G[vNumber].push_back(Edge2(current.v2, 1));
+          G[vNumber + 1].push_back(Edge2(current.v1, 1));
+        }
       }
+      vNumber++;
     }
-    q.pop();
   }
 }
 
@@ -65,43 +74,16 @@ void read_maze() {
   make_maze();
 }
 
-void make_maze() {
-    int vNumber = 0;
-    for (int i = 0; i < maze.size(); i++) {
-      for (int j = 0; j < maze[0].size(); j++) {
-        if (maze[i][j] == '.') {
-          if (i + 1 < maze.size() && maze[i + 1][j] == '.') {
-            Edge current;
-            current.v1 = vNumber;
-            current.v2 = vNumber + maze[0].size();
-            G[vNumber].push_back(Edge2(current.v2, 1));
-
-            int index = vNumber + maze[0].size();
-            G[index].push_back(Edge2(current.v1, 1));
-          }
-          if (j + 1 < maze[0].size() && maze[i][j + 1] == '.') {
-            Edge current;
-            current.v1 = vNumber;
-            current.v2 = vNumber + 1;
-            G[vNumber].push_back(Edge2(current.v2, 1));
-            G[vNumber + 1].push_back(Edge2(current.v1, 1));
-          }
-        }
-        vNumber++;
-      }
-    }
-}
-
 vector<int> marked;
 bool found = false;
 
 void draw() {
-    int i = G.size() - 1, h = maze.size(), h = maze[0].size();
-    maze[h - 1][h - 1] = 'x';
+    int i = G.size() - 1, h = maze.size(), w = maze[0].size();
+    maze[h - 1][w - 1] = 'x';
 
     while(marked[i] != -1) {
-      int x = marked[i] / h;
-      int y = marked[i] % h;
+      int x = marked[i] / w;
+      int y = marked[i] % w;
       maze[x][y] = 'x';
       i = marked[i];
     }
@@ -115,6 +97,24 @@ void print() {
         cout << maze[i][j];
     }
     cout << endl;
+  }
+}
+
+void bfs(int v) {
+  queue <int> q;
+  marked[v] = -1;
+  q.push(v);
+
+  while (!q.empty()) {
+    int currentVertex = q.front();
+
+    for (int i = 0; i < G[currentVertex].size(); i++) {
+      if (marked[G[currentVertex][i].v2] == -2) {
+        marked[G[currentVertex][i].v2] = currentVertex;
+        q.push(G[currentVertex][i].v2);
+      }
+    }
+    q.pop();
   }
 }
 
